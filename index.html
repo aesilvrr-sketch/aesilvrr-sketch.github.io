@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d12" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ShiftPay" />
+  <title>ShiftPay UK</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    :root{
+      --bg:#0b0d12;--card:#151820;--card2:#1c202a;--text:#f5f7fb;--muted:#9ba4b5;
+      --accent:#39d37a;--accent2:#62a8ff;--warn:#ffcc66;--danger:#ff6b6b;--line:#292f3b;
+      --shadow:0 16px 40px rgba(0,0,0,.28);--radius:22px;
+    }
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    body{min-height:100vh;padding-bottom:110px}
+    button,input,select{font:inherit}
+    .wrap{width:min(760px,100%);margin:0 auto;padding:calc(env(safe-area-inset-top) + 18px) 16px 20px}
+    .top{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 18px}
+    .brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#07110b;font-weight:900;font-size:22px;box-shadow:var(--shadow)}
+    h1{font-size:24px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:2px}
+    .pill{border:1px solid var(--line);background:var(--card);color:var(--text);padding:9px 12px;border-radius:999px;font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+    .hero{grid-column:1/-1;background:linear-gradient(145deg,#17251d,#151820 60%)}
+    .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.big{font-size:38px;font-weight:850;line-height:1.1;margin:6px 0}.money{font-variant-numeric:tabular-nums}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px}.muted{color:var(--muted)}.green{color:var(--accent)}.blue{color:var(--accent2)}.warn{color:var(--warn)}.danger{color:var(--danger)}
+    .metric{font-size:22px;font-weight:750;margin-top:5px}.small{font-size:12px}.tiny{font-size:11px}
+    .bar{height:10px;border-radius:999px;background:#252a35;overflow:hidden;margin:10px 0 5px}.bar>i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
+    .sectionTitle{display:flex;justify-content:space-between;align-items:center;margin:26px 2px 10px}.sectionTitle h2{font-size:18px;margin:0}.linkbtn{background:none;border:0;color:var(--accent2);padding:8px;font-weight:650}
+    .shift{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}.shift:last-child{border-bottom:0}
+    .datebox{width:46px;height:50px;border-radius:14px;background:var(--card2);display:grid;place-items:center;line-height:1}.datebox b{font-size:18px}.datebox span{font-size:10px;color:var(--muted);text-transform:uppercase}
+    .shift b{font-size:15px}.shift .meta{font-size:12px;color:var(--muted);margin-top:3px}.shift .pay{text-align:right}.shift .pay b{font-variant-numeric:tabular-nums}
+    .badge{display:inline-flex;align-items:center;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:700;margin-left:5px}.holiday{background:rgba(57,211,122,.13);color:var(--accent)}.work{background:rgba(98,168,255,.13);color:var(--accent2)}
+    .empty{text-align:center;color:var(--muted);padding:26px 10px}
+    .fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 20px);width:min(728px,calc(100% - 32px));display:flex;gap:10px;z-index:20}.fab button{flex:1;border:0;border-radius:18px;padding:15px 16px;font-weight:800;box-shadow:0 14px 35px rgba(0,0,0,.4)}.primary{background:var(--accent);color:#07110b}.secondary{background:#252b37;color:var(--text);border:1px solid var(--line)!important}
+    dialog{width:min(680px,calc(100% - 20px));border:1px solid var(--line);border-radius:26px;background:#12151c;color:var(--text);padding:0;box-shadow:0 25px 90px rgba(0,0,0,.65)}dialog::backdrop{background:rgba(0,0,0,.7);backdrop-filter:blur(5px)}
+    .modalHead{position:sticky;top:0;background:#12151c;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:17px 18px;border-bottom:1px solid var(--line)}.modalHead h3{margin:0;font-size:19px}.close{background:#252a35;border:0;color:var(--text);width:36px;height:36px;border-radius:50%;font-size:20px}
+    .modalBody{padding:16px 18px 22px;max-height:75vh;overflow:auto}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}.field.full{grid-column:1/-1}.field label{font-size:12px;color:var(--muted);font-weight:650}.field input,.field select{width:100%;background:#1b2029;border:1px solid #303746;color:var(--text);border-radius:14px;padding:12px 13px;outline:none}.field input:focus,.field select:focus{border-color:var(--accent2)}
+    .toggle{display:flex;align-items:center;justify-content:space-between;background:#191d26;border:1px solid var(--line);border-radius:15px;padding:12px 13px;margin-bottom:10px}.toggle input{width:20px;height:20px}.modalAction{display:flex;gap:10px;margin-top:16px}.modalAction button{flex:1;border-radius:15px;padding:13px;border:0;font-weight:800}
+    .note{font-size:12px;line-height:1.5;color:var(--muted);padding:11px 12px;background:#171b23;border:1px solid var(--line);border-radius:14px;margin:10px 0}.note strong{color:var(--text)}
+    .tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px}.tab{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:8px 11px;font-size:12px}.tab.active{background:#263029;color:var(--accent);border-color:#365a43}
+    .plannerBox{margin-top:10px;background:#13171e;border:1px solid var(--line);padding:13px;border-radius:16px}.plannerResult{font-size:26px;font-weight:850;margin-top:5px}
+    .historyItem{display:grid;grid-template-columns:1fr auto;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}.historyItem:last-child{border:0}
+    .settingsGroup{margin:16px 0 8px;font-size:13px;font-weight:800;color:var(--accent2)}
+    .footer{color:var(--muted);font-size:11px;line-height:1.5;margin:26px 5px}.footer a{color:var(--accent2)}
+    @media (max-width:460px){.grid{grid-template-columns:1fr 1fr}.big{font-size:34px}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.card{padding:14px}.shift{grid-template-columns:44px 1fr auto}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><div class="logo">£</div><div><h1>ShiftPay UK</h1><div class="sub">Primark preset • 4-week pay planner</div></div></div>
+    <button class="pill" id="settingsBtn">⚙︎ Settings</button>
+  </div>
+
+  <div class="tabs" id="periodTabs"></div>
+
+  <div class="grid">
+    <div class="card hero">
+      <div class="row"><div><div class="label">Estimated take-home</div><div class="big money" id="netPay">£0.00</div></div><div style="text-align:right"><div class="label">Gross</div><div class="metric money" id="grossPay">£0.00</div></div></div>
+      <div class="bar"><i id="thresholdBar"></i></div>
+      <div class="row small"><span class="muted" id="headroomText">£0 until estimated deductions</span><span class="muted" id="periodText"></span></div>
+    </div>
+    <div class="card"><div class="label">Paid hours</div><div class="metric" id="paidHours">0h</div><div class="small muted" id="scheduledHours">0h scheduled</div></div>
+    <div class="card"><div class="label">Estimated deductions</div><div class="metric money" id="deductions">£0.00</div><div class="small muted"><span id="taxVal">Tax £0</span> • <span id="niVal">NI £0</span></div></div>
+    <div class="card"><div class="label">Holiday pay</div><div class="metric money" id="holidayGross">£0.00</div><div class="small muted" id="holidayHours">0h fully paid</div></div>
+    <div class="card"><div class="label">Breaks unpaid</div><div class="metric" id="breakHours">0h</div><div class="small muted">Holiday breaks stay paid</div></div>
+  </div>
+
+  <div class="sectionTitle"><h2>Smart planner</h2><button class="linkbtn" id="plannerReset">Reset</button></div>
+  <div class="card">
+    <div class="label">What if I work extra?</div>
+    <div class="formgrid" style="margin-top:10px">
+      <div class="field"><label>Extra paid hours</label><input id="extraHours" type="number" min="0" step="0.25" value="0"></div>
+      <div class="field"><label>Extra premium (£)</label><input id="extraPremium" type="number" min="0" step="0.01" value="0"></div>
+    </div>
+    <div class="plannerBox"><div class="small muted">New take-home estimate</div><div class="plannerResult money" id="plannerNet">£0.00</div><div class="small" id="plannerDelta"></div></div>
+    <div class="note" id="sweetSpot"></div>
+  </div>
+
+  <div class="sectionTitle"><h2>Shifts</h2><button class="linkbtn" id="sortBtn">Newest first</button></div>
+  <div class="card" id="shiftList"></div>
+
+  <div class="sectionTitle"><h2>Payslip history</h2><button class="linkbtn" id="addPayslipBtn">+ Add payslip</button></div>
+  <div class="card" id="historyList"></div>
+
+  <div class="sectionTitle"><h2>Backup & export</h2></div>
+  <div class="card">
+    <div class="row" style="flex-wrap:wrap;justify-content:flex-start">
+      <button class="pill" id="exportCsv">Export shifts CSV</button>
+      <button class="pill" id="exportJson">Backup data</button>
+      <label class="pill" style="cursor:pointer">Restore backup<input type="file" id="importJson" accept="application/json" hidden></label>
+    </div>
+    <div class="note"><strong>Privacy:</strong> everything is stored locally on this device. No account, cloud database, NI number, address or employee number is needed.</div>
+  </div>
+
+  <div class="footer">
+    Tax/NI figures are planning estimates and payroll can differ by pennies or more depending on HMRC coding, cumulative basis, benefits, other jobs and payroll tables. 2026/27 defaults use HMRC/GOV.UK published rates. <a href="https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027" target="_blank" rel="noopener">Rates & thresholds</a> · <a href="https://www.gov.uk/national-insurance-rates-letters/contribution-rates" target="_blank" rel="noopener">NI rates</a>
+  </div>
+</div>
+
+<div class="fab"><button class="primary" id="addShiftBtn">＋ Add shift</button><button class="secondary" id="newPeriodBtn">New pay period</button></div>
+
+<dialog id="shiftDialog">
+  <div class="modalHead"><h3 id="shiftModalTitle">Add shift</h3><button class="close" data-close="shiftDialog">×</button></div>
+  <div class="modalBody">
+    <input type="hidden" id="editShiftId">
+    <div class="formgrid">
+      <div class="field full"><label>Date</label><input type="date" id="shiftDate"></div>
+      <div class="field"><label>Start</label><input type="time" id="shiftStart" value="09:00"></div>
+      <div class="field"><label>Finish</label><input type="time" id="shiftEnd" value="18:00"></div>
+      <div class="field"><label>Type</label><select id="shiftType"><option value="work">Worked shift</option><option value="holiday">Holiday pay</option></select></div>
+      <div class="field"><label>Hourly rate</label><input type="number" id="shiftRate" min="0" step="0.01"></div>
+      <div class="field"><label>Night/premium hours</label><input type="number" id="premiumHours" min="0" step="0.01" value="0"></div>
+      <div class="field"><label>Premium %</label><input type="number" id="premiumPct" min="0" step="1" value="20"></div>
+    </div>
+    <div class="toggle"><div><b>Automatic Primark breaks</b><div class="small muted">Uses your saved break rules</div></div><input type="checkbox" id="autoBreak" checked></div>
+    <div class="field" id="manualBreakField" style="display:none"><label>Unpaid break minutes</label><input type="number" id="manualBreak" min="0" step="5" value="0"></div>
+    <div class="note" id="shiftPreview">Enter a shift to preview pay.</div>
+    <div class="modalAction"><button class="secondary" id="deleteShiftBtn" style="display:none">Delete</button><button class="primary" id="saveShiftBtn">Save shift</button></div>
+  </div>
+</dialog>
+
+<dialog id="periodDialog">
+  <div class="modalHead"><h3>New pay period</h3><button class="close" data-close="periodDialog">×</button></div>
+  <div class="modalBody">
+    <div class="field"><label>Period name</label><input id="periodName" placeholder="e.g. Aug–Sep 2026"></div>
+    <div class="formgrid"><div class="field"><label>Start date</label><input type="date" id="periodStart"></div><div class="field"><label>End date</label><input type="date" id="periodEnd"></div></div>
+    <div class="modalAction"><button class="primary" id="savePeriodBtn">Create period</button></div>
+  </div>
+</dialog>
+
+<dialog id="payslipDialog">
+  <div class="modalHead"><h3>Add actual payslip</h3><button class="close" data-close="payslipDialog">×</button></div>
+  <div class="modalBody">
+    <div class="field"><label>Label / payday</label><input id="payslipLabel" placeholder="e.g. 24 Jul 2026"></div>
+    <div class="formgrid">
+      <div class="field"><label>Gross pay</label><input type="number" id="payslipGross" min="0" step="0.01"></div>
+      <div class="field"><label>Net pay</label><input type="number" id="payslipNet" min="0" step="0.01"></div>
+      <div class="field"><label>Income tax</label><input type="number" id="payslipTax" min="0" step="0.01" value="0"></div>
+      <div class="field"><label>National Insurance</label><input type="number" id="payslipNI" min="0" step="0.01" value="0"></div>
+    </div>
+    <div class="modalAction"><button class="primary" id="savePayslipBtn">Save payslip</button></div>
+  </div>
+</dialog>
+
+<dialog id="settingsDialog">
+  <div class="modalHead"><h3>Settings</h3><button class="close" data-close="settingsDialog">×</button></div>
+  <div class="modalBody">
+    <div class="settingsGroup">Pay</div>
+    <div class="formgrid"><div class="field"><label>Default hourly rate</label><input id="setRate" type="number" step="0.01"></div><div class="field"><label>Default night premium %</label><input id="setPremium" type="number" step="1"></div></div>
+    <div class="settingsGroup">Tax estimate (2026/27)</div>
+    <div class="formgrid">
+      <div class="field"><label>Tax code number</label><input id="setTaxCode" type="number" step="1"></div>
+      <div class="field"><label>Tax basis</label><select id="setTaxBasis"><option value="w1">Week 1 / non-cumulative</option><option value="cumulative">Cumulative estimate</option></select></div>
+      <div class="field"><label>Current pay-period number</label><input id="setPeriodNumber" type="number" min="1" max="14" step="1"></div>
+      <div class="field"><label>YTD taxable gross before this period</label><input id="setYtdGross" type="number" min="0" step="0.01"></div>
+      <div class="field"><label>YTD tax paid before this period</label><input id="setYtdTax" type="number" min="0" step="0.01"></div>
+      <div class="field"><label>NI category</label><select id="setNICat"><option value="M">M (under 21)</option><option value="A">A (standard)</option><option value="H">H (apprentice under 25)</option></select></div>
+    </div>
+    <div class="settingsGroup">Other deductions</div>
+    <div class="formgrid"><div class="field"><label>Pension % of gross</label><input id="setPension" type="number" min="0" step="0.1"></div><div class="field"><label>Other fixed deduction per period</label><input id="setOther" type="number" min="0" step="0.01"></div></div>
+    <div class="settingsGroup">Primark break preset</div>
+    <div class="note">≤4.5h: 0m · 5h-ish: 15m · 6h: 30m · 7h: 60m · 8–9.5h: 90m · 10h+: 105m. Holiday-pay shifts keep all scheduled hours paid. You can override the break on any shift.</div>
+    <div class="toggle"><div><b>Start with sample/current shifts</b><div class="small muted">Only affects Reset App Data</div></div><input type="checkbox" id="setSeed" checked></div>
+    <div class="modalAction"><button class="secondary" id="resetDataBtn">Reset app data</button><button class="primary" id="saveSettingsBtn">Save settings</button></div>
+  </div>
+</dialog>
+
+<script>
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n||0));
+const round2=n=>Math.round((Number(n)+Number.EPSILON)*100)/100;
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+
+const defaults={
+ settings:{rate:13,premiumPct:20,taxCode:1253,taxBasis:'w1',periodNumber:5,ytdGross:2538.30,ytdTax:133,niCat:'M',pensionPct:0,otherDeduction:0,seed:true},
+ periods:[{id:'p5',name:'19 Jul – 15 Aug',start:'2026-07-19',end:'2026-08-15'}],
+ currentPeriod:'p5',
+ shifts:[
+  {id:'s1',periodId:'p5',date:'2026-07-19',start:'07:00',end:'16:30',type:'holiday',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s2',periodId:'p5',date:'2026-07-20',start:'06:00',end:'10:30',type:'holiday',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s3',periodId:'p5',date:'2026-07-21',start:'09:00',end:'13:00',type:'work',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s4',periodId:'p5',date:'2026-07-22',start:'09:00',end:'13:00',type:'work',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s5',periodId:'p5',date:'2026-07-23',start:'09:00',end:'13:00',type:'work',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s6',periodId:'p5',date:'2026-07-26',start:'07:00',end:'16:30',type:'holiday',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s7',periodId:'p5',date:'2026-07-27',start:'06:00',end:'10:30',type:'holiday',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s8',periodId:'p5',date:'2026-08-02',start:'07:00',end:'16:30',type:'work',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s9',periodId:'p5',date:'2026-08-03',start:'06:00',end:'10:30',type:'work',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s10',periodId:'p5',date:'2026-08-06',start:'13:00',end:'17:00',type:'work',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s11',periodId:'p5',date:'2026-08-08',start:'09:00',end:'18:30',type:'work',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20},
+  {id:'s12',periodId:'p5',date:'2026-08-09',start:'07:00',end:'16:30',type:'work',rate:13,autoBreak:true,manualBreak:0,premiumHours:0,premiumPct:20}
+ ],
+ payslips:[
+  {id:'ps1',label:'26 Jun 2026',gross:696.85,net:696.85,tax:0,ni:0},
+  {id:'ps2',label:'24 Jul 2026',gross:1629.81,net:1443.79,tax:133,ni:53.02}
+ ]
+};
+function clone(x){return JSON.parse(JSON.stringify(x))}
+let state=(()=>{try{return JSON.parse(localStorage.getItem('shiftpayUK'))||clone(defaults)}catch(e){return clone(defaults)}})();
+let newestFirst=false;
+function save(){localStorage.setItem('shiftpayUK',JSON.stringify(state))}
+
+function scheduledHours(s){
+ const [sh,sm]=s.start.split(':').map(Number), [eh,em]=s.end.split(':').map(Number);
+ let mins=(eh*60+em)-(sh*60+sm); if(mins<=0)mins+=1440; return mins/60;
+}
+function autoBreakMinutes(hours){
+ if(hours<=4.5)return 0;
+ if(hours<6)return 15;
+ if(hours<7)return 30;
+ if(hours<8)return 60;
+ if(hours<10)return 90;
+ return 105;
+}
+function calcShift(s){
+ const sched=scheduledHours(s);
+ const breakMins=s.type==='holiday'?0:(s.autoBreak?autoBreakMinutes(sched):Number(s.manualBreak||0));
+ const paid=Math.max(0,sched-breakMins/60);
+ const basic=paid*Number(s.rate||state.settings.rate);
+ const premium=Number(s.premiumHours||0)*Number(s.rate||state.settings.rate)*(Number(s.premiumPct||0)/100);
+ return {sched,breakMins,paid,basic,premium,gross:basic+premium};
+}
+function currentShifts(){return state.shifts.filter(s=>s.periodId===state.currentPeriod)}
+function calcPeriod(extraGross=0){
+ const items=currentShifts().map(calcShift);
+ const gross=items.reduce((a,b)=>a+b.gross,0)+Number(extraGross||0);
+ const tax=estimateTax(gross);
+ const ni=estimateNI(gross);
+ const pension=gross*(Number(state.settings.pensionPct||0)/100);
+ const other=Number(state.settings.otherDeduction||0);
+ return {gross,tax,ni,pension,other,net:gross-tax-ni-pension-other,items};
+}
+function annualAllowance(){return Number(state.settings.taxCode||1257)*10}
+function annualTax(taxable){
+ taxable=Math.max(0,taxable);
+ let t=0;
+ const basic=37700, higherSpan=125140-annualAllowance()-basic;
+ const a=Math.min(taxable,basic); t+=a*.20; taxable-=a;
+ if(taxable>0){const b=Math.min(taxable,Math.max(0,higherSpan));t+=b*.40;taxable-=b}
+ if(taxable>0)t+=taxable*.45;
+ return t;
+}
+function estimateTax(gross){
+ const allowance=annualAllowance();
+ if(state.settings.taxBasis==='w1'){
+  const free=allowance/13; const basicBand=37700/13;
+  let taxable=Math.max(0,gross-free), tax=0;
+  const basic=Math.min(taxable,basicBand); tax+=basic*.20; taxable-=basic;
+  if(taxable>0)tax+=taxable*.40;
+  return round2(tax);
+ }
+ const p=Math.max(1,Number(state.settings.periodNumber||1));
+ const cumulativeAllowance=allowance*(Math.min(p,13)/13);
+ const cumulativeBand=37700*(Math.min(p,13)/13);
+ const cumulativeGross=Number(state.settings.ytdGross||0)+gross;
+ let taxable=Math.max(0,cumulativeGross-cumulativeAllowance), totalTax=0;
+ const basic=Math.min(taxable,cumulativeBand); totalTax+=basic*.20; taxable-=basic;
+ if(taxable>0)totalTax+=taxable*.40;
+ return Math.max(0,round2(totalTax-Number(state.settings.ytdTax||0)));
+}
+function estimateNI(gross){
+ // 4-week exact-percentage planning estimate. Category M/A/H have same employee rates here.
+ const PT=242*4, UEL=967*4;
+ if(gross<=PT)return 0;
+ const main=Math.min(gross,UEL)-PT;
+ const upper=Math.max(0,gross-UEL);
+ return round2(Math.max(0,main)*.08+upper*.02);
+}
+function taxFreePeriodLimit(){return annualAllowance()/13}
+function niFreePeriodLimit(){return 242*4}
+function deductionFreeLimit(){return Math.min(taxFreePeriodLimit(),niFreePeriodLimit())}
+
+function fmtHours(n){
+ const h=Math.floor(n+1e-8), m=Math.round((n-h)*60); return m?`${h}h ${m}m`:`${h}h`;
+}
+function dateParts(str){const d=new Date(str+'T12:00:00');return {day:d.getDate(),mon:d.toLocaleDateString('en-GB',{month:'short'}),full:d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}}
+function currentPeriodObj(){return state.periods.find(p=>p.id===state.currentPeriod)||state.periods[0]}
+
+function render(){
+ const c=calcPeriod(); const shifts=currentShifts(); const calcs=shifts.map(calcShift);
+ const paid=calcs.reduce((a,b)=>a+b.paid,0), sched=calcs.reduce((a,b)=>a+b.sched,0), breaks=calcs.reduce((a,b)=>a+b.breakMins,0)/60;
+ const holidayEntries=shifts.map((s,i)=>({s,c:calcs[i]})).filter(x=>x.s.type==='holiday');
+ const holidayGross=holidayEntries.reduce((a,x)=>a+x.c.gross,0), holidayHours=holidayEntries.reduce((a,x)=>a+x.c.paid,0);
+ $('netPay').textContent=money(c.net); $('grossPay').textContent=money(c.gross); $('paidHours').textContent=fmtHours(paid); $('scheduledHours').textContent=`${fmtHours(sched)} scheduled`;
+ $('deductions').textContent=money(c.tax+c.ni+c.pension+c.other); $('taxVal').textContent=`Tax ${money(c.tax)}`; $('niVal').textContent=`NI ${money(c.ni)}`;
+ $('holidayGross').textContent=money(holidayGross); $('holidayHours').textContent=`${fmtHours(holidayHours)} fully paid`; $('breakHours').textContent=fmtHours(breaks);
+ const lim=deductionFreeLimit(), head=lim-c.gross; $('headroomText').textContent=head>=0?`${money(head)} until estimated deductions`:`${money(-head)} above no-deduction target`;
+ $('thresholdBar').style.width=`${Math.min(100,c.gross/lim*100)}%`;
+ const p=currentPeriodObj(); $('periodText').textContent=p?`${p.start.split('-').slice(1).reverse().join('/')}–${p.end.split('-').slice(1).reverse().join('/')}`:'';
+ renderTabs();renderShifts();renderHistory();renderPlanner();renderSweetSpot();
+}
+function renderTabs(){
+ $('periodTabs').innerHTML=state.periods.map(p=>`<button class="tab ${p.id===state.currentPeriod?'active':''}" data-period="${p.id}">${p.name}</button>`).join('');
+ document.querySelectorAll('[data-period]').forEach(b=>b.onclick=()=>{state.currentPeriod=b.dataset.period;save();render()});
+}
+function renderShifts(){
+ let shifts=[...currentShifts()];shifts.sort((a,b)=>a.date.localeCompare(b.date)*(newestFirst?-1:1));
+ if(!shifts.length){$('shiftList').innerHTML='<div class="empty">No shifts in this pay period yet.</div>';return}
+ $('shiftList').innerHTML=shifts.map(s=>{const c=calcShift(s),d=dateParts(s.date);return `<div class="shift" data-shift="${s.id}"><div class="datebox"><b>${d.day}</b><span>${d.mon}</span></div><div><b>${s.start}–${s.end}<span class="badge ${s.type}">${s.type==='holiday'?'HOLIDAY':'WORK'}</span></b><div class="meta">${fmtHours(c.paid)} paid · ${c.breakMins?c.breakMins+'m unpaid break':'breaks paid / none'}</div></div><div class="pay"><b>${money(c.gross)}</b><div class="meta">${fmtHours(c.sched)}</div></div></div>`}).join('');
+ document.querySelectorAll('[data-shift]').forEach(el=>el.onclick=()=>openEditShift(el.dataset.shift));
+}
+function renderHistory(){
+ if(!state.payslips.length){$('historyList').innerHTML='<div class="empty">Add your real payslips to compare estimates.</div>';return}
+ $('historyList').innerHTML=[...state.payslips].reverse().map(p=>`<div class="historyItem"><div><b>${p.label}</b><div class="small muted">Gross ${money(p.gross)} · Tax ${money(p.tax)} · NI ${money(p.ni)}</div></div><div style="text-align:right"><b>${money(p.net)}</b><div class="small muted">net</div></div></div>`).join('');
+}
+function renderPlanner(){
+ const h=Number($('extraHours').value||0), prem=Number($('extraPremium').value||0), extra=h*Number(state.settings.rate)+prem;
+ const base=calcPeriod(), after=calcPeriod(extra);
+ $('plannerNet').textContent=money(after.net); $('plannerDelta').innerHTML=`Extra gross <b>${money(extra)}</b> → extra take-home <b class="green">${money(after.net-base.net)}</b>`;
+}
+function renderSweetSpot(){
+ const c=calcPeriod(), lim=deductionFreeLimit(), remain=lim-c.gross, rate=Number(state.settings.rate);
+ if(remain>0){$('sweetSpot').innerHTML=`<strong>Zero-deduction target:</strong> about ${money(lim)} gross this period. You currently have roughly <strong>${money(remain)}</strong> / <strong>${fmtHours(remain/rate)}</strong> of base-rate paid work before the estimate starts showing Income Tax or NI.`}
+ else{$('sweetSpot').innerHTML=`You are already above the approximate zero-deduction target by <strong>${money(-remain)}</strong>. Working more still increases take-home — only the amount above relevant thresholds is charged at the applicable rates.`}
+}
+
+function openAddShift(){
+ $('shiftModalTitle').textContent='Add shift';$('editShiftId').value='';$('deleteShiftBtn').style.display='none';
+ const p=currentPeriodObj();$('shiftDate').value=p?.start||new Date().toISOString().slice(0,10);$('shiftStart').value='09:00';$('shiftEnd').value='18:00';$('shiftType').value='work';$('shiftRate').value=state.settings.rate;$('premiumHours').value=0;$('premiumPct').value=state.settings.premiumPct;$('autoBreak').checked=true;$('manualBreak').value=0;updateShiftPreview();$('shiftDialog').showModal();
+}
+function openEditShift(id){
+ const s=state.shifts.find(x=>x.id===id);if(!s)return;$('shiftModalTitle').textContent='Edit shift';$('editShiftId').value=id;$('deleteShiftBtn').style.display='block';
+ ['Date','Start','End','Type','Rate'].forEach(k=>$('shift'+k).value=s[k.toLowerCase()]);$('premiumHours').value=s.premiumHours||0;$('premiumPct').value=s.premiumPct||state.settings.premiumPct;$('autoBreak').checked=s.autoBreak!==false;$('manualBreak').value=s.manualBreak||0;$('manualBreakField').style.display=$('autoBreak').checked?'none':'flex';updateShiftPreview();$('shiftDialog').showModal();
+}
+function draftShift(){return {id:$('editShiftId').value||uid(),periodId:state.currentPeriod,date:$('shiftDate').value,start:$('shiftStart').value,end:$('shiftEnd').value,type:$('shiftType').value,rate:Number($('shiftRate').value||state.settings.rate),autoBreak:$('autoBreak').checked,manualBreak:Number($('manualBreak').value||0),premiumHours:Number($('premiumHours').value||0),premiumPct:Number($('premiumPct').value||0)}}
+function updateShiftPreview(){try{const s=draftShift(),c=calcShift(s);$('shiftPreview').innerHTML=`${fmtHours(c.sched)} scheduled → <strong>${fmtHours(c.paid)} paid</strong> · break ${c.breakMins}m · estimated gross <strong>${money(c.gross)}</strong>${s.type==='holiday'?' (holiday: break time remains paid)':''}`;}catch(e){}}
+
+$('addShiftBtn').onclick=openAddShift;
+$('saveShiftBtn').onclick=()=>{const s=draftShift();if(!s.date||!s.start||!s.end)return;const idx=state.shifts.findIndex(x=>x.id===s.id);if(idx>=0)state.shifts[idx]=s;else state.shifts.push(s);save();$('shiftDialog').close();render()};
+$('deleteShiftBtn').onclick=()=>{const id=$('editShiftId').value;if(id&&confirm('Delete this shift?')){state.shifts=state.shifts.filter(s=>s.id!==id);save();$('shiftDialog').close();render()}};
+['shiftDate','shiftStart','shiftEnd','shiftType','shiftRate','premiumHours','premiumPct','manualBreak'].forEach(id=>$(id).addEventListener('input',updateShiftPreview));
+$('autoBreak').onchange=()=>{$('manualBreakField').style.display=$('autoBreak').checked?'none':'flex';updateShiftPreview()};
+
+$('newPeriodBtn').onclick=()=>{const last=currentPeriodObj();let start=new Date((last?.end||new Date().toISOString().slice(0,10))+'T12:00:00');start.setDate(start.getDate()+1);let end=new Date(start);end.setDate(end.getDate()+27);$('periodStart').value=start.toISOString().slice(0,10);$('periodEnd').value=end.toISOString().slice(0,10);$('periodName').value=`${start.toLocaleDateString('en-GB',{day:'numeric',month:'short'})} – ${end.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}`;$('periodDialog').showModal()};
+$('savePeriodBtn').onclick=()=>{const p={id:uid(),name:$('periodName').value||'Pay period',start:$('periodStart').value,end:$('periodEnd').value};state.periods.push(p);state.currentPeriod=p.id;state.settings.periodNumber=Math.min(14,Number(state.settings.periodNumber||1)+1);save();$('periodDialog').close();render()};
+
+$('addPayslipBtn').onclick=()=>{$('payslipLabel').value='';$('payslipGross').value='';$('payslipNet').value='';$('payslipTax').value=0;$('payslipNI').value=0;$('payslipDialog').showModal()};
+$('savePayslipBtn').onclick=()=>{state.payslips.push({id:uid(),label:$('payslipLabel').value||'Payslip',gross:Number($('payslipGross').value||0),net:Number($('payslipNet').value||0),tax:Number($('payslipTax').value||0),ni:Number($('payslipNI').value||0)});save();$('payslipDialog').close();render()};
+
+$('settingsBtn').onclick=()=>{const s=state.settings;$('setRate').value=s.rate;$('setPremium').value=s.premiumPct;$('setTaxCode').value=s.taxCode;$('setTaxBasis').value=s.taxBasis;$('setPeriodNumber').value=s.periodNumber;$('setYtdGross').value=s.ytdGross;$('setYtdTax').value=s.ytdTax;$('setNICat').value=s.niCat;$('setPension').value=s.pensionPct;$('setOther').value=s.otherDeduction;$('setSeed').checked=s.seed!==false;$('settingsDialog').showModal()};
+$('saveSettingsBtn').onclick=()=>{state.settings={...state.settings,rate:Number($('setRate').value||13),premiumPct:Number($('setPremium').value||20),taxCode:Number($('setTaxCode').value||1257),taxBasis:$('setTaxBasis').value,periodNumber:Number($('setPeriodNumber').value||1),ytdGross:Number($('setYtdGross').value||0),ytdTax:Number($('setYtdTax').value||0),niCat:$('setNICat').value,pensionPct:Number($('setPension').value||0),otherDeduction:Number($('setOther').value||0),seed:$('setSeed').checked};save();$('settingsDialog').close();render()};
+$('resetDataBtn').onclick=()=>{if(confirm('Reset all app data to the original setup?')){state=clone(defaults);save();$('settingsDialog').close();render()}};
+
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());
+$('sortBtn').onclick=()=>{newestFirst=!newestFirst;$('sortBtn').textContent=newestFirst?'Oldest first':'Newest first';renderShifts()};
+$('extraHours').oninput=renderPlanner;$('extraPremium').oninput=renderPlanner;$('plannerReset').onclick=()=>{$('extraHours').value=0;$('extraPremium').value=0;renderPlanner()};
+
+function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+$('exportJson').onclick=()=>download('shiftpay-backup.json',JSON.stringify(state,null,2),'application/json');
+$('exportCsv').onclick=()=>{const rows=[['date','start','end','type','scheduled_hours','break_minutes','paid_hours','rate','gross']];currentShifts().forEach(s=>{const c=calcShift(s);rows.push([s.date,s.start,s.end,s.type,c.sched.toFixed(2),c.breakMins,c.paid.toFixed(2),s.rate,c.gross.toFixed(2)])});download('shiftpay-shifts.csv',rows.map(r=>r.join(',')).join('\n'),'text/csv')};
+$('importJson').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!data.settings||!data.periods||!data.shifts)throw new Error();state=data;save();render();alert('Backup restored.')}catch(err){alert('That does not look like a valid ShiftPay backup.')}e.target.value=''};
+
+if('serviceWorker' in navigator && location.protocol!=='file:'){navigator.serviceWorker.register('./service-worker.js').catch(()=>{})}
+render();
+</script>
+</body>
+</html>
